@@ -1,4 +1,4 @@
-# Kuverse Mibile App
+# Kuverse Mobile App
 
 The kuverse.app is a mobile application designed to empower NFT (Non-Fungible Token) holders by providing them with a user-friendly platform to manage and monetize their NFT assets. The app will focus on the mobile user experience, allowing for seamless and clean usability for everyone.
 
