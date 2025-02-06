@@ -289,16 +289,22 @@ const Header = (props) => {
                 </li>
                 <li>
                   <a href="#">
+                    COINBASE{" "}
+                    <img src="images/coinbase.png" alt="Coinbase" />
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
                     TRUST WALLET{" "}
                     <img src="images/trust-logo 1.png" alt="Trust Wallet" />
                   </a>
                 </li>
                 <li>
                   <a href="#">
-                    WALLETCONNECT{" "}
+                    EXODUS{" "}
                     <img
-                      src="images/wallet_connect 1.png"
-                      alt="WalletConnect"
+                      src="images/exodus.png"
+                      alt="Exodus"
                     />
                   </a>
                 </li>

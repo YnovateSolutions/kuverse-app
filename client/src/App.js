@@ -188,21 +188,6 @@ function App() {
   };
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = React.useState();
-  useEffect(() => {
-    const connectorKey = window.localStorage.getItem(connectorLocalStorageKey);
-    if (connectorKey && connectorKey !== "") {
-      const currentConnector = getConnector(connectorKey);
-      if (connectorKey === "injectedConnector") {
-        currentConnector.isAuthorized().then((isAuthorized) => {
-          if (isAuthorized) activate(currentConnector);
-        });
-      } else {
-        activate(currentConnector);
-      }
-    } else if (activatingConnector && activatingConnector === connector) {
-      setActivatingConnector(undefined);
-    }
-  }, []);
   const { activateError } = useInactiveListener(!!activatingConnector);
   // handling connection error
   if (activateError && errorModalOpen === null) {
@@ -574,7 +559,7 @@ function App() {
 
         {/* KILT Wallet Modal */}
         {!!isKiltError && (
-          <ModalWindow className="modal-window">
+          <ModalWindow className="modal-window" style={{ zIndex: 99 }}>
             <ModalContainer>
               <ModalWrap className="modal-wrap" style={{ paddingBottom: 24 }}>
                 <ModalBody>
