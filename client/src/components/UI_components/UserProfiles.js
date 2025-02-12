@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { device } from "../../components/devices";
 import { useTheme } from "../../context/themeContext";
+import { WalletContext } from '../../context/walletContext';
 
 const TechCenterInnerContentTop = styled.div`
   margin: 0 auto;
@@ -134,6 +135,7 @@ const Icon = styled.span`
 
 const TechCenterInnerContent = () => {
   const { theme } = useTheme();
+  const { walletAddress } = useContext(WalletContext);
   return (
     <TechCenterInnerContentTop className="w-100 px-4">
       <Counting>
@@ -166,7 +168,9 @@ const TechCenterInnerContent = () => {
         </ProfileImage>
         <ProfileDetail>
           <ProfileDetailText>
-            0x10K1AJ0L5...{" "}
+            {walletAddress
+              ? `${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}`
+              : 'No wallet connected'}
             <Icon className="play-flex">
               <ProfileImageIcon
                 className="d-none-dark"
@@ -178,7 +182,7 @@ const TechCenterInnerContent = () => {
                 src="images/edit-icon.png"
                 alt="Edit Icon"
               />
-              <ProfileImageIcon3 
+              <ProfileImageIcon3
                 src="images/profile/play-game (1).png"
                 alt="Play Game Icon"
               />

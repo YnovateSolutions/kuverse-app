@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import * as A from "../styles/TopNavbar.styles";
 import "../../components/styles/CustomCss/style.css";
 import { ButtonDiv, ButtonStyle1 } from "./Buttons";
 import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
+import { InjectedConnector } from '@web3-react/injected-connector';
 import { shorter } from "../../utils";
 
 import { test, useTheme } from "../../context/themeContext";
+import { WalletContext } from '../../context/walletContext';
 
 const CompanyLogo = "/images/MainLogo.png";
 
@@ -61,15 +63,21 @@ const SectionItems = [
   },
 ];
 
+// Define the InjectedConnector for MetaMask
+const injectedConnector = new InjectedConnector({
+  supportedChainIds: [2109],
+});
+
 const Header = (props) => {
   const [minimenuOpen, setMinimenuOpen] = useState(false);
   const [walletOpen, setWalletOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const { account } = useWeb3React();
+  const { activate, account } = useWeb3React();
   const [showNavMenu, setShowNavMenu] = useState(true); // Always show the lower menu
   const [menuText, setMenuText] = useState("");
   const [showLowerMenu, setShowLowerMenu] = useState(true);
+  const { setWalletAddress } = useContext(WalletContext);
 
   let navigate = useNavigate();
 
@@ -108,6 +116,12 @@ const Header = (props) => {
     };
   }, [minimenuOpen]);
 
+  useEffect(() => {
+    if (account) {
+      setWalletAddress(account); // Set the wallet address in context
+    }
+  }, [account, setWalletAddress]);
+
   const handleToggleClick = (e) => {
     e.stopPropagation();
     setMinimenuOpen(!minimenuOpen);
@@ -118,8 +132,27 @@ const Header = (props) => {
     e.stopPropagation();
     setWalletOpen(!walletOpen);
   };
+
   const handleCloseWallet = () => {
     setWalletOpen(false);
+  };
+
+  const handleConnectViaMetamask = async () => {    
+  
+    // Check if MetaMask is installed
+    if (typeof window.ethereum === 'undefined') {
+      alert('MetaMask is not installed. Please install MetaMask to connect.');
+      return;
+    }
+  
+    try {
+      // Activate the MetaMask connector      
+      await activate(injectedConnector); 
+      handleCloseWallet(); 
+    } catch (error) {
+      console.error('Error connecting to MetaMask:', error);
+      alert('Error connecting to MetaMask. Please try again.');
+    }
   };
 
   return (
@@ -283,7 +316,7 @@ const Header = (props) => {
             <div>
               <ul>
                 <li>
-                  <a href="#">
+                  <a href="#" onClick={handleConnectViaMetamask}>
                     METAMASK <img src="images/cat.png" alt="Metamask" />
                   </a>
                 </li>
